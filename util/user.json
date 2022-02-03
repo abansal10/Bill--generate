@@ -1,0 +1,9 @@
+{
+    "usersList":[
+        {"name":"Anil tiwari","address": "Latehar"},
+        {"name":"Bijay Kumar", "address": "Daltonganj"},
+        {"name":"Ajay Babu", "address": "Chainpur"},
+        {"name":"Bajrani kumar", "address": "Lesliganj"},
+        {"name":"Awadh babu","address":"Satbarwa"}
+    ]
+}

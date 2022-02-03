@@ -1,0 +1,62 @@
+<%- include('../includes/head.ejs') %>
+    <link rel="stylesheet" href="/css/forms.css">
+    <link rel="stylesheet" href="/css/product.css">
+    <link rel="stylesheet" href="/css/bill.css">
+</head>
+
+<body>
+   <%- include('../includes/navigation.ejs') %>
+    
+    <main>
+        <form class="product-form" action="/daily" method="POST">
+            <div class="form-control">
+                <label for="date">Start date:</label>
+                <input type="date" id="date" name="date">
+            </div>
+            <button class="btn" type="submit">Get Bill</button>
+        </form>
+        <table id="customers">
+            
+            <tbody>
+              <%if (records.length >0){ %>
+                <% var total = 0 %>
+                <thead>
+                    <tr>
+                      <th>Invoice</th>
+                      <th>Name</th>
+                      <th>Address</th>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Total Amount</th>
+                    </tr>
+                  </thead>
+              <% records.forEach(function(row){ %>
+              <tr>
+                <td><%= row.invoice%></td>
+                <td><%= row.name %></td>
+                <td><%= row.address %></td>
+                <td><%= row.price %></td>
+                <td><%= row.quantity %></td>
+                <td><%= row.price * row.quantity %></td>
+              </tr colspan="6">
+              <% total=total + row.price * row.quantity %>
+              <% })}else{ %>
+                <tr>
+                    <td colspan="6">No Record Found</td>
+                  </tr>
+                <% } %>
+                <%if (total>0){ %>
+                    <thead>
+                        <tr>
+                          <th>SubTotal Amount</th>
+                        </tr>
+                      </thead>
+                    <tr>
+                        <td><%= total%></td>
+                    </tr>
+                    
+                <% } %>
+            </tbody>
+          </table>
+    </main>
+<%- include('../includes/end.ejs') %>
