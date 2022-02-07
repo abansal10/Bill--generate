@@ -19,7 +19,9 @@
             
             <tbody>
               <%if (records.length >0){ %>
+                <h1>Date-- <%= dateValue%> </h1>
                 <% var total = 0 %>
+                <% var qtotal = 0 %>
                 <thead>
                     <tr>
                       <th>Invoice</th>
@@ -28,6 +30,7 @@
                       <th>Price</th>
                       <th>Quantity</th>
                       <th>Total Amount</th>
+                      <th>Download Link</th>
                     </tr>
                   </thead>
               <% records.forEach(function(row){ %>
@@ -38,8 +41,10 @@
                 <td><%= row.price %></td>
                 <td><%= row.quantity %></td>
                 <td><%= row.price * row.quantity %></td>
+                <td><a href="/download/<%= row.invoice%>" target="_blank">Click here</a></td>
               </tr colspan="6">
               <% total=total + row.price * row.quantity %>
+              <% qtotal=qtotal + row.quantity %>
               <% })}else{ %>
                 <tr>
                     <td colspan="6">No Record Found</td>
@@ -49,10 +54,12 @@
                     <thead>
                         <tr>
                           <th>SubTotal Amount</th>
+                          <th>SubTotal Quantity</th>
                         </tr>
                       </thead>
                     <tr>
                         <td><%= total%></td>
+                        <td><%= qtotal%></td>
                     </tr>
                     
                 <% } %>

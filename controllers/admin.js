@@ -10,24 +10,26 @@ exports.login = (req, res, next) => {
     path: "/login",
     editing: false,
     message: 0,
+    loggedIn:0
   });
 };
 
 exports.getBill = (req, res, next) => {
-  const authcookie = req.cookies.authcookie;
+  // const authcookie = req.cookies.authcookie;
 
-  //verify token which is in cookie value
-  jwt.verify(authcookie, "AkashKumar", (err, data) => {
-    if (err) {
-      console.log(err);
-    } else if (data) {
-      console.log(data);
-    }
-  });
+  // //verify token which is in cookie value
+  // jwt.verify(authcookie, "AkashKumar", (err, data) => {
+  //   if (err) {
+  //     console.log(err);
+  //   } else if (data) {
+  //     console.log(data);
+  //   }
+  // });
   res.render("admin/generate-bill", {
     pageTitle: "Add Product",
     path: "/bill",
     editing: false,
+    loggedIn:1
   });
 };
 
@@ -37,6 +39,7 @@ exports.getBillDaily = (req, res, next) => {
     path: "/daily",
     records: [],
     editing: false,
+    loggedIn:1
   });
 };
 
@@ -45,6 +48,7 @@ exports.getBillMonthly = (req, res, next) => {
     pageTitle: "Monthly Bill",
     path: "/monthly",
     editing: false,
+    loggedIn:1
   });
 };
 
@@ -70,49 +74,7 @@ exports.postAddBill = async (req, res, next) => {
   });
   Bill.create(bill)
     .then((result) => {
-      if (result) {
-        const invoiceData = {
-          shipping: {
-            name: result.name,
-            address: result.address,
-            date: new Date(result.date),
-          },
-          items: [
-            {
-              quantity: result.quantity,
-              amount: result.price,
-            },
-          ],
-          invoice_nr: result.invoice,
-        };
-
-        const filename = "invoice_" + result.invoice + ".pdf";
-        console.log(filename)
-        createInvoice(invoiceData, filename,(created)=>{
-          setTimeout(() => {
-              try {
-                if (fs.existsSync("D://Node-js Practice//Bill- generate//"+filename)) {
-                console.log("fileExirs")
-                if(created==='created'){
-                  res.setHeader("Content-Type", "text/pdf");
-                  res.download(filename,(error)=>{
-                    console.log("Error--- : ", error)
-                  })
-                  console.log("File Download started")
-                }
-                }
-                else{
-                  console.log("not fileExirs")
-                }
-              } catch(err) {
-                console.error(err)
-              }
-        }, 50);
-          
-        });
-        
-      }
-      //
+     res.status(201).redirect("/bill")
     })
     .catch((err) => {
       console.log("err", err);
@@ -130,6 +92,7 @@ exports.postDailyBill = (req, res, next) => {
         pageTitle: "Daily Bill",
         path: "/daily",
         records: result,
+        dateValue: date,
         editing: false,
       });
     })
@@ -138,3 +101,60 @@ exports.postDailyBill = (req, res, next) => {
       next();
     });
 };
+
+exports.getBillDownload=(req,res,next)=>{
+    const id= req.params.id
+    if(id){
+      Bill.findOne({invoice: id})
+      .then((result)=>{
+        if (result) {
+          const invoiceData = {
+            shipping: {
+              name: result.name,
+              address: result.address,
+              date: new Date(result.date),
+            },
+            items: [
+              {
+                quantity: result.quantity,
+                amount: result.price,
+              },
+            ],
+            invoice_nr: result.invoice,
+          };
+          console.log(result)
+          const filename = "invoice_" + result.invoice + ".pdf";
+          console.log(filename)
+          createInvoice(invoiceData, filename,(created)=>{
+            setTimeout(() => {
+                try {
+                  if (fs.existsSync("D://Node-js Practice//Bill- generate//"+filename)) {
+                  console.log("fileExirs")
+                  if(created==='created'){
+                    res.setHeader("Content-Type", "text/pdf");
+                    res.download(filename,(error)=>{
+                      console.log("Error--- : ", error)
+                    })
+                    console.log("File Download started")
+                  }
+                  }
+                  else{
+                    console.log("not fileExirs")
+                  }
+                } catch(err) {
+                  console.error(err)
+                }
+          }, 1000);
+            
+          });
+          
+        }
+      })
+      .catch(err=>{
+        console.log(`{id not found}`)
+        res.status(500).send({"message":"id not found"})
+      })
+      
+
+    }
+}
