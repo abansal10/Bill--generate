@@ -24,16 +24,16 @@ exports.postLogin = async (req, res, next) => {
       .then((isTrue) => {
         if (isTrue) {
           //create jwt token
-          const token = jwt.sign({ username: username }, "AkashKumar",{expiresIn:10000});
+          const token = jwt.sign({ username: username }, "AkashKumar",{expiresIn:100000});
           //save token in cookie
-          res.cookie("authcookie", token, { maxAge: 900000, httpOnly: true });
+          res.cookie("authcookie", token, { maxAge: 9000000, httpOnly: true });
           res
             .render("admin/generate-bill", {
               pageTitle: "Add Product",
               path: "/bill",
               editing: false,
+              loggedIn:1
             })
-            .status(201);
         } else {
           res.render("admin/login", {
             pageTitle: "Add Product",
