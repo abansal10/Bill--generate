@@ -1,7 +1,7 @@
 const fs = require("fs");
 const PDFDocument = require("pdfkit");
 
-module.exports= function  createInvoice(invoice, path,callback) {
+module.exports= function  createInvoice(invoice, path) {
   console.log("invoice date",invoice.shipping.date)
     let doc = new PDFDocument({ margin: 50 });
   
@@ -11,7 +11,6 @@ module.exports= function  createInvoice(invoice, path,callback) {
   //  generateFooter(doc);
     doc.pipe(fs.createWriteStream(path));
     doc.end();
-    callback("created")
   }
 
 

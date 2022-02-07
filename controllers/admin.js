@@ -122,32 +122,21 @@ exports.getBillDownload=(req,res,next)=>{
             ],
             invoice_nr: result.invoice,
           };
-          console.log(result)
+          console.log(result);
           const filename = "invoice_" + result.invoice + ".pdf";
-          console.log(filename)
-          createInvoice(invoiceData, filename,(created)=>{
-            setTimeout(() => {
-                try {
-                  if (fs.existsSync("D://Node-js Practice//Bill- generate//"+filename)) {
-                  console.log("fileExirs")
-                  if(created==='created'){
-                    res.setHeader("Content-Type", "text/pdf");
-                    res.download(filename,(error)=>{
-                      console.log("Error--- : ", error)
-                    })
-                    console.log("File Download started")
-                  }
-                  }
-                  else{
-                    console.log("not fileExirs")
-                  }
-                } catch(err) {
-                  console.error(err)
-                }
+          console.log(filename);
+          createInvoice(invoiceData, filename);
+          setTimeout(() => {
+            try {
+              res.setHeader("Content-Type", "text/pdf");
+              res.download(filename, (error) => {
+                console.log("Error--- : ", error);
+              });
+              console.log("File Download started");
+            } catch (err) {
+              console.error(err);
+            }
           }, 1000);
-            
-          });
-          
         }
       })
       .catch(err=>{
