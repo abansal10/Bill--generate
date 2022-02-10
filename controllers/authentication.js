@@ -14,26 +14,31 @@ exports.login = (req, res, next) => {
 exports.postLogin = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
-
   const userData = await User.findOne({ username: username });
-  console.log(userData)
   if (userData) {
-    console.log(userData)
     bcrypt
       .compare(password, userData.password)
       .then((isTrue) => {
         if (isTrue) {
+          try {
           //create jwt token
-          const token = jwt.sign({ username: username }, "AkashKumar",{expiresIn:100000});
-          //save token in cookie
-          res.cookie("authcookie", token, { maxAge: 9000000, httpOnly: true });
-          res
-            .render("admin/generate-bill", {
+            const token = jwt.sign({ username: username }, "AkashKumar", {
+              expiresIn: 100000,
+            });
+            //save token in cookie
+            res.cookie("authcookie", token, {
+              maxAge: 9000000,
+              httpOnly: true,
+            });
+            res.render("admin/generate-bill", {
               pageTitle: "Add Product",
               path: "/bill",
               editing: false,
-              loggedIn:1
-            })
+              loggedIn: 1,
+            });
+          } catch (err) {
+            console.log("Login Issue",err);
+          }
         } else {
           res.render("admin/login", {
             pageTitle: "Add Product",
@@ -90,19 +95,23 @@ exports.signup = (req, res, next) => {
     });
 };
 
-exports.tokenAuth=(req,res,next)=>{
-  const authcookie = req.cookies.authcookie;
-  //verify token which is in cookie value
-  jwt.verify(authcookie, "AkashKumar", (err, data) => {
-    if (err) {
-      res.render("admin/login", {
-        pageTitle: "Add Product",
-        path: "/login",
-        editing: false,
-        message: 10,
-      });
-    } else if (data) {
-      next()
-    }
-  });
-}
+exports.tokenAuth = (req, res, next) => {
+  try{
+    const authcookie = req.cookies.authcookie;
+    jwt.verify(authcookie, "AkashKumar", (err, data) => {
+      if (err) {
+        res.render("admin/login", {
+          pageTitle: "Add Product",
+          path: "/login",
+          editing: false,
+          message: 10,
+        });
+      } else if (data) {
+        next();
+      }
+    });
+  }
+  catch(e){
+    console.log("Error verifying Token", e)
+  }
+};

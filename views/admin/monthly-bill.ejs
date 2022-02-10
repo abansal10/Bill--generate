@@ -1,22 +1,92 @@
 <%- include('../includes/head.ejs') %>
     <link rel="stylesheet" href="/css/forms.css">
     <link rel="stylesheet" href="/css/product.css">
-</head>
+    <link rel="stylesheet" href="/css/bill.css">
+    </head>
 
-<body>
-   <%- include('../includes/navigation.ejs') %>
-    
-    <main>
-        <form class="product-form" action="/add-bill" method="POST">
-            <div class="form-control">
-                <label for="date">Start date:</label>
-                <input type="date" id="sdate" name="sdate">
-            </div>
-            <div class="form-control">
-                <label for="date">End date:</label>
-                <input type="date" id="edate" name="edate">
-            </div>
-            <button class="btn" type="submit">Generate Bill</button>
-        </form>
-    </main>
-<%- include('../includes/end.ejs') %>
+    <body>
+        <%- include('../includes/navigation.ejs') %>
+
+            <main>
+                <div class="form-style-5">
+                    <form class="product-form" action="/monthly" method="POST">
+                        <div class="form-control">
+                            <label for="month">Select Month</label>
+                            <select id="months" name="months">
+                                <option value="1">Jan</option>
+                                <option value="2">Feb</option>
+                                <option value="3">Mar</option>
+                                <option value="4">Apr</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">Aug</option>
+                                <option value="9">Sep</option>
+                                <option value="10">Oct</option>
+                                <option value="11">Nov</option>
+                                <option value="12">Dec</option>
+
+                            </select>
+                        </div>
+                        <div class="form-control">
+                            <label for="year">Select Year</label>
+                            <select id="years" name="years">
+                                <option value="2021">2021</option>
+                                <option value="2022">2022</option>
+                                <option value="2023">2023</option>
+                                <option value="2024">2024</option>
+                                <option value="2025">2025</option>
+                            </select>
+                        </div>
+                        <button class="btn" type="submit">Generate Bill</button>
+                    </form>
+                </div>
+             
+                <table id="customers">
+                    <tbody>
+                    <%if ((Object.keys(records).length) >0){ %>
+                        <% var total = 0 %>
+                        <% var qtotal = 0 %>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Sub Total</th>
+                                <th>Total Quantity</th>
+                            </tr>
+                        </thead>
+                        <% for (objectKeys in records){ %>
+                            <tr>
+                                <td>
+                                    <%= objectKeys%>
+                                </td>
+                                <td>
+                                    <%= records[objectKeys].totalBill %>
+                                </td>
+                                <td>
+                                    <%= records[objectKeys].quantity%>
+                                </td>
+                            </tr colspan="6">
+                            <% total=total + records[objectKeys].totalBill %>
+                        <% qtotal=qtotal+records[objectKeys].quantity %>
+                        <% }}else{ %>
+                            <tr>
+                                <td colspan="6"><h1>No Record</h1></td>
+                              </tr>
+                    <% } %>
+                    <%if (total>0){ %>
+                        <thead>
+                            <tr>
+                              <th>SubTotal Amount Monthly</th>
+                              <th>SubTotal Quantity Monthly</th>
+                            </tr>
+                          </thead>
+                        <tr>
+                            <td><%= total%></td>
+                            <td><%= qtotal%></td>
+                        </tr>
+                        
+                    <% } %>
+                </tbody> 
+            </table>
+            </main>
+            <%- include('../includes/end.ejs') %>

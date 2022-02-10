@@ -16,6 +16,7 @@ router.get('/daily',authicate.tokenAuth, adminController.getBillDaily);
 router.post('/daily',authicate.tokenAuth, adminController.postDailyBill);
 
 router.get('/monthly',authicate.tokenAuth, adminController.getBillMonthly);
+router.post('/monthly',authicate.tokenAuth, adminController.postBillMonthly);
 router.get('/download/:id',authicate.tokenAuth, adminController.getBillDownload);
 
 module.exports = router;
