@@ -8,13 +8,15 @@
    <%- include('../includes/navigation.ejs') %>
     
     <main>
+      <div class="form-style-5">
         <form class="product-form" action="/daily" method="POST">
             <div class="form-control">
                 <label for="date">Start date:</label>
-                <input type="date" id="date" name="date">
+                <input type="date" id="date" name="date" required="true">
             </div>
             <button class="btn" type="submit">Get Bill</button>
         </form>
+      </div>
         <table id="customers">
             
             <tbody>

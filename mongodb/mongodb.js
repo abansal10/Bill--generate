@@ -25,5 +25,6 @@ const url=process.env.MONGO_URL
 mongoose.connect(urlPrefix+mongoUsername+":"+mongoPassword+url+mongoDatabase, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: false
+    useFindAndModify: false,
+    useUnifiedTopology: true 
 })
