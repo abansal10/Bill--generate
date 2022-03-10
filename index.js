@@ -9,7 +9,7 @@ require('./mongodb/mongodb')
 
 const errorController = require('./controllers/error');
 // const User = require('./models/user');
-
+//commented by Akash
 const adminRoutes=require('./route/admin')
 const app = express();
 
