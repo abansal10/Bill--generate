@@ -9,8 +9,12 @@ require('./mongodb/mongodb')
 
 const errorController = require('./controllers/error');
 // const User = require('./models/user');
+<<<<<<< HEAD
 //Added By Raja
 
+=======
+//commented by Akash
+>>>>>>> origin
 const adminRoutes=require('./route/admin')
 const app = express();
 
