@@ -9,7 +9,6 @@ require('./mongodb/mongodb')
 
 const errorController = require('./controllers/error');
 // const User = require('./models/user');
-//Added By Raja Kumar
 
 const adminRoutes=require('./route/admin')
 const app = express();
@@ -34,5 +33,5 @@ app.use(adminRoutes);
 app.use(errorController.get404);
 
 app.listen(port,()=>{
-  console.log(`running on port ${port}`)
+  console.log(`running on port dev ${port}`)
 })
